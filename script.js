@@ -1,16 +1,15 @@
-// ============================Global Variable====================
-
-// Set Winning hand to 21 and dealer must hit state to 16
+// ======================Global Variable=================
 var sumLimit = 21;
 var dealerHitThreshold = 16;
-//Set gamestates
 var playerHasChosenToStand = false;
 var gameOver = false;
-// Will need an array to hold player and computer's cards
+
 var playerHand = [];
 var computerHand = [];
-// ============================Main Funtion=======================
+
+// ======================Main Funciton=================
 var main = function (input) {
+
   // If initial hands have not been dealt, deal initial hands
   if (playerHand.length === 0) {
     // User clicks submit button to deal cards.
@@ -103,22 +102,17 @@ var main = function (input) {
     Else, press Submit to see Computer's next move.`;
 };
 
-// ============================Helper Funtion====================
-// Create a function to produce a deck of cards
+//=====================================Helper Functions======================================
 var makeDeck = function () {
-  // create an array to store all the cards thats been created
   var deck = [];
-  // identify the required groups of cards
+
   var suits = ["hearts", "diamonds", "clubs", "spades"];
-  // while the counter is smaller than the length of the array suits keep looping
+
   var suitIndex = 0;
   while (suitIndex < suits.length) {
     var currentSuit = suits[suitIndex];
 
     var rankCounter = 1;
-    // while the counter is smallerEqual to 13 then keep looping
-    //Other than ace,jackk, queen and king, all loops will return counter as cardName
-    // 1 will return as ace, 11 as jack, 12 as queen and 13 as king
     while (rankCounter <= 13) {
       var cardName = rankCounter;
 
@@ -131,54 +125,52 @@ var makeDeck = function () {
       } else if (cardName == 13) {
         cardName = "king";
       }
-      //input cardname, suit and rank into an obect called card.
+
       var card = {
         name: cardName,
         suit: currentSuit,
         rank: rankCounter,
       };
-      //push the card object into the deck array
+
       deck.push(card);
 
       rankCounter = rankCounter + 1;
     }
     suitIndex = suitIndex + 1;
   }
+
   return deck;
 };
-// Create a Shuffle deck function
-//create random number based on the parameters number
-var getRandomNum = function (size) {
+
+var getRandomIndex = function (size) {
   return Math.floor(Math.random() * size);
 };
 
 var shuffleCards = function (cards) {
   var index = 0;
-  // keep running as long as counte is lesser then the parameters length
+
   while (index < cards.length) {
-    // var randomNum will call the randomNum function and randomise it base on the parameters length
-    var randomNum = getRandomNum(cards.length);
-    //set var currentItem as parameters's counter value
+    var randomIndex = getRandomIndex(cards.length);
+
     var currentItem = cards[index];
-    // set var randomItemm as parameter's randomize value
-    var randomItem = cards[randomNum];
-    // set parameter's counter value as var randomItem
+
+    var randomItem = cards[randomIndex];
+
     cards[index] = randomItem;
-    // set parameter's randomize value to var curentItem
-    cards[randomNum] = currentItem;
+    cards[randomIndex] = currentItem;
 
     index = index + 1;
   }
 
   return cards;
 };
-// Deal Cards
-// insert/push the card into the parameter after removing from the deck
+
+var deck = shuffleCards(makeDeck());
+
 var dealCardToHand = function (hand) {
   hand.push(deck.pop());
 };
 
-// Calculate hand value
 var getHandSum = function (hand) {
   var numAcesInHand = 0;
   var sum = 0;
@@ -210,7 +202,7 @@ var getHandSum = function (hand) {
   }
   return sum;
 };
-// analyze if the hand is a blackjack
+
 var isBlackjack = function (hand) {
   return hand.length === 2 && getHandSum(hand) === sumLimit;
 };
@@ -228,7 +220,6 @@ var convertHandToString = function (hand) {
   return `[${hand.map((card) => card.name)}]`;
 };
 
-// set default value
 var getDefaultOutput = function () {
   return `Player has hand: <br>===============<br> ${convertHandToString(
     playerHand
